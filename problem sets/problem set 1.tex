@@ -1,0 +1,119 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{wasysym}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsthm}
+\usepackage{braket}
+\usepackage{microtype}
+\usepackage{amssymb}
+\usepackage{listings}
+\usepackage{tikz}
+\usetikzlibrary{trees}
+\newcommand{\Mod}[1]{\ (\mathrm{mod}\ #1)}
+\begin{document}
+\title{Artifical Intelligence Problem Set }
+\date{}
+\author{Willie Yee}
+\maketitle
+\noindent
+\textbf{Problem 1.} 3 Different parse trees shown below
+\begin{lstlisting}
+S ---> NP ---> Noun ---> Dogs
+   |       |
+   |       |-> Noun ---> wag
+   |
+   |-> VP ---> VP -----> Verb ---> tail
+           |
+           |-> Conj ---> and
+           |
+           |-> VP -----> Verb ---> bark
+\end{lstlisting}
+\begin{lstlisting}
+S ---> NP ---> Noun ---> Dogs
+   |
+   |-> VP ---> Verb ---> wag
+           |
+           |-> NP -----> NP -----> Noun ---> tail
+                     |
+                     |-> Conj ---> and
+                     |
+                     |-> NP -----> Noun ---> bark
+\end{lstlisting}
+\begin{lstlisting}
+S ---> NP ---> Noun ---> Dogs
+   |
+   |-> VP ---> VP -----> Verb ---> wag
+           |         |
+           |         |-> NP -----> Noun ---> tail
+           |
+           |-> Conj ---> and
+           |
+           |-> VP -----> Verb ---> bark
+\end{lstlisting}
+\textbf{Problem 2.}\\
+A. I bought this bouquet of roses at the deli. Isn't \textit{it} beautiful?\\
+Delis are not often described as beautiful.\\
+\\
+B. The children took out their lunches because \textit{they} were hungry.\\
+Lunches are not animate so they cannot be described as hungry.\\
+\\
+C. The children took out their lunches, but \textit{they} were growing mold.\\
+Hygienic children do not grow mold on themselves.\\
+\\
+D. The scientists are studying three species of fish. \textit{They} are in danger of extinction.\\
+Currently, scientists are not in danger of going extinct.\\
+\\
+E. The scientists are studying three species of fish. \textit{They} have been working for three years.\\
+Fish do not work (in the same sense scientists do).\\
+\\
+F. The scientists are studying three species of fish. \textit{They} were previously unknown.\\
+We do not discover previously unknown scientists.\\
+\\
+G. The scientists are studying three species of fish and how \textit{they} swim.\\
+It is more likely that the fish are swimming, not the scientists.\\
+\\
+H. Before the other guests arrived, Fred murdered George and hid the body under the dining-room table, and then \textit{he} had to be the life and soul of the party, with it there all the time.\\
+He cannot refer to George because George is dead.\\
+\\
+I. Before the other guests arrived, Fred murdered George and hid the body under the dining-room table, and then he had to be the life and soul of the party, with \textit{it} there all the time.\\
+Once murdered, a body can be referred to an "it."\\
+\\
+J. What about the time you cut up tulip bulbs in the hamburgers because you thought \textit{they} were onions?\\
+Tulip bulbs are of similar size and shape to tulip bulbs.\\
+\\
+\textbf{Problem 3.}
+\begin{lstlisting}
+Lexicon:
+"I" -----------> Create Symbol Speaker. Assert Person(Speaker)
+                 Denotation = Speaker.
+"saw" ---------> Content: See.
+"man" ---------> Content: Man.
+"telescope" ---> Content: Telescope.
+
+Additional Rules:
+Rule 1:
+Given: NP ---> Det
+           |
+           |-> Noun
+           |
+           |-> PP
+    Create new symbol N. Assert Owns(N,Denotation(PP))
+Rule 2:
+Given: PP ---> Prep
+           |
+           |-> NP
+    Denotation(PP) = Denotation(NP)
+Rule 3:
+Given: S ---> NP1
+          |
+          |-> VP ---> Verb
+                  |
+                  |-> NP2
+                  |             
+                  |-> PP
+    Create new symbol E. Assert Event(E,Verb.Content)
+        Assert Actor(E,Denotation(NP1))
+        Assert Object(E,Denotation(NP2))
+        Assert Instrument(E,Denotation(PP))
+\end{lstlisting}
+\end{document}
