@@ -52,14 +52,38 @@ void printPreOrder(struct object * node)
 	}
 }
 
-// DFS with specified depth
-object * DFS(vector<object> knapsack, int depth, string previous)
+/*
+									   A                         B                 C           D            E
+				  AB              AC      AD   AE        BC      BD   BE        CD   CE        DE
+		ABC       ABD   ABE   ACD   ACE   ADE          BCD BCE   BDE            CDE
+	ABCD   ABCE   ABDE        ACDE
+	ABCDE
+*/
+
+// DFS with specified depth and target value
+object * DFS(vector<object> knapsack, int depth, object * previous, double targetValue)
 {
-	object * root = createObject("",0,0);
-	int index = 0;
-	for(int i = 0; i < depth; i++)
+	if(previous == NULL)
 	{
-		(root->children).push_back(createObject(previous + knapsack[index].name,knapsack[index].value,knapsack[index].weight));
+		return NULL;
+	}
+	
+	if(previous->value >= targetValue)
+	{
+		return previous;
+	}
+	
+	if(depth == 0)
+	{
+		return NULL;
+	}
+	
+	for(int i = 0; i < knapsack.size(); i++)
+	{
+		object * temp = createObject(previous->name + knapsack[i].name, previous->value + knapsack[i].value, previous->weight + knapsack[i].weight);
+		cout << temp->name << "," << temp->value << "," << temp->weight << endl;
+		(previous->children).push_back(temp);
+		DFS(knapsack,depth - 1,temp,targetValue - temp->value);
 	}
 }
 
@@ -84,18 +108,10 @@ int main()
 	}
 	inputFile.close();
 	
-	/*
-	                                       A                         B                 C           D            E
-	                  AB              AC      AD   AE        BC      BD   BE        CD   CE        DE
-		    ABC       ABD   ABE   ACD   ACE   ADE          BCD BCE   BDE            CDE
-		ABCD   ABCE   ABDE        ACDE
-		ABCDE
-	*/
-	
 	// iterate through depths
 	for(int i = 1; i <= knapsack.size(); i++)
 	{
-		DFS(knapsack,i,"");
+		object * solution = DFS(knapsack,i,createObject("",0,0),targetValue);
 	}
 	return 0;
 }
