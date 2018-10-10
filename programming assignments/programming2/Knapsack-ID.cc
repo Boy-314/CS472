@@ -24,7 +24,33 @@ struct object
 	string name;
 	double value;
 	double weight;
+	vector<object *> children;
 };
+
+// create root of state space
+object * createObject(string n, double v, double w)
+{
+	object * temp = new object;
+	temp->name = n;
+	temp->value = v;
+	temp->weight = w;
+	return temp;
+}
+
+// preorder traversal
+void printPreOrder(struct object * node)
+{
+	if(node == NULL)
+	{
+		return;
+	}
+	
+	cout << node->name << " ";
+	for(int i = 0; i < (node->children).size(); i++)
+	{
+		printPreOrder((node->children)[i]);
+	}
+}
 
 int main()
 {
@@ -46,6 +72,26 @@ int main()
 		knapsack.push_back(item);
 	}
 	inputFile.close();
+	
+	/*
+	                        A                         B                C              D                   E
+	        AB          AC     AD   AE        BC      BD   BE          CD   CE        DE
+		ABC ABD ABE  ACD ACE   ADE          BCD BCE   BDE              CDE
+	*/
+	
+	// construct state space
+	object * root = createObject("",0,0);
+	string previousName = "";
+	for(int i = 0; i < knapsack.size(); i++)
+	{
+		for(int j = i; j < knapsack.size(); j++)
+		{
+			(root->children).push_back(createObject(knapsack[j].name,knapsack[j].value,knapsack[j].weight));
+		}
+	}
+	
+	// preorder traversal
+	printPreOrder(root);
 	
 	return 0;
 }
