@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <bits/stdc++.h>
 #include <fstream>
 #include <iomanip>
 #include <iostream>
@@ -12,9 +13,8 @@ using namespace std;
 Iterative Deepening for Solving Knapsack Problem
 */
 
-
-// struct for each object in the knapsack
 /*
+struct for each object in the knapsack
 name: object name (alphabetic character string)
 value
 weight
@@ -46,6 +46,6 @@ int main()
 		knapsack.push_back(item);
 	}
 	inputFile.close();
-		
+	
 	return 0;
 }
