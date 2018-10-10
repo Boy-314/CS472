@@ -52,6 +52,17 @@ void printPreOrder(struct object * node)
 	}
 }
 
+// DFS with specified depth
+object * DFS(vector<object> knapsack, int depth, string previous)
+{
+	object * root = createObject("",0,0);
+	int index = 0;
+	for(int i = 0; i < depth; i++)
+	{
+		(root->children).push_back(createObject(previous + knapsack[index].name,knapsack[index].value,knapsack[index].weight));
+	}
+}
+
 int main()
 {
 	double targetValue, maximumWeight;
@@ -74,24 +85,17 @@ int main()
 	inputFile.close();
 	
 	/*
-	                        A                         B                C              D                   E
-	        AB          AC     AD   AE        BC      BD   BE          CD   CE        DE
-		ABC ABD ABE  ACD ACE   ADE          BCD BCE   BDE              CDE
+	                                       A                         B                 C           D            E
+	                  AB              AC      AD   AE        BC      BD   BE        CD   CE        DE
+		    ABC       ABD   ABE   ACD   ACE   ADE          BCD BCE   BDE            CDE
+		ABCD   ABCE   ABDE        ACDE
+		ABCDE
 	*/
 	
-	// construct state space
-	object * root = createObject("",0,0);
-	string previousName = "";
-	for(int i = 0; i < knapsack.size(); i++)
+	// iterate through depths
+	for(int i = 1; i <= knapsack.size(); i++)
 	{
-		for(int j = i; j < knapsack.size(); j++)
-		{
-			(root->children).push_back(createObject(knapsack[j].name,knapsack[j].value,knapsack[j].weight));
-		}
+		DFS(knapsack,i,"");
 	}
-	
-	// preorder traversal
-	printPreOrder(root);
-	
 	return 0;
 }
