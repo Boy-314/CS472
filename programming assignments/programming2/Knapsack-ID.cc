@@ -61,15 +61,16 @@ void printPreOrder(struct object * node)
 */
 
 // DFS with specified depth and target value
-object * DFS(vector<object> knapsack, int depth, object * previous, double targetValue)
+object * DFS(vector<object> knapsack, int depth, object * previous, double targetValue, double maximumWeight)
 {
 	if(previous == NULL)
 	{
 		return NULL;
 	}
 	
-	if(previous->value >= targetValue)
+	if(previous->value >= targetValue && previous->weight <= maximumWeight)
 	{
+		cout << previous->name << ":" << previous->value << "," << previous->weight << endl;
 		return previous;
 	}
 	
@@ -81,9 +82,8 @@ object * DFS(vector<object> knapsack, int depth, object * previous, double targe
 	for(int i = 0; i < knapsack.size(); i++)
 	{
 		object * temp = createObject(previous->name + knapsack[i].name, previous->value + knapsack[i].value, previous->weight + knapsack[i].weight);
-		cout << temp->name << "," << temp->value << "," << temp->weight << endl;
 		(previous->children).push_back(temp);
-		DFS(knapsack,depth - 1,temp,targetValue - temp->value);
+		DFS(knapsack,depth - 1,temp,targetValue - temp->value,maximumWeight - temp->weight);
 	}
 }
 
@@ -111,7 +111,12 @@ int main()
 	// iterate through depths
 	for(int i = 1; i <= knapsack.size(); i++)
 	{
-		object * solution = DFS(knapsack,i,createObject("",0,0),targetValue);
+		object * solution = DFS(knapsack,i,createObject("",0,0),targetValue,maximumWeight);
+		if(solution != NULL)
+		{
+			cout << solution->name << endl;
+			break;
+		}
 	}
 	return 0;
 }
