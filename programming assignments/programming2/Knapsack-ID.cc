@@ -72,19 +72,53 @@ object * DFS(vector<object> knapsack, object * o, int depth, double targetValue,
 		return nullptr;
 	}
 	
-	int lastIndex = (o->name).size() - 1;
-	string last = (o->name)[lastIndex];
+	int lastIndex = 0;
+	string last = "";
+	if((o->name).size() != 0)
+	{
+		lastIndex = (o->name).size() - 1;
+		last = (o->name)[lastIndex];
+	}
+
 	vector<object> children;
 	for(int i = 0; i < knapsack.size(); i++)
 	{
+		// base case
+		if(last == "")
+		{
+			if(o->weight + knapsack[i].weight <= maximumWeight)
+			{
+				vector<string> newName = o->name;
+				newName.push_back((knapsack[i].name)[0]);
+				// cout << endl;
+				// for(int i = 0; i < newName.size(); i++)
+				// {
+					// cout << newName[i];
+				// }
+				// cout << endl;
+				object child = {newName, o->value + knapsack[i].value, o->weight + knapsack[i].weight};
+				object * ans = DFS(knapsack, &child, depth - 1, targetValue, maximumWeight);
+				if(ans != nullptr)
+				{
+					return ans;
+				}
+			}
+		}
+		
 		// check for all names that come alphabetically after the last element in the object's name
-		if(last.compare((knapsack[i].name)[0]) < 0)
+		else if(last.compare((knapsack[i].name)[0]) < 0)
 		{
 			// if adding the letter maintains the maximumWeight
 			if(o->weight + knapsack[i].weight <= maximumWeight)
 			{
 				vector<string> newName = o->name;
 				newName.push_back((knapsack[i].name)[0]);
+				// cout << endl;
+				// for(int i = 0; i < newName.size(); i++)
+				// {
+					// cout << newName[i];
+				// }
+				// cout << endl;
 				object child = {newName, o->value + knapsack[i].value, o->weight + knapsack[i].weight};
 				object * ans = DFS(knapsack, &child, depth - 1, targetValue, maximumWeight);
 				if(ans != nullptr)
@@ -101,7 +135,7 @@ object * DFS(vector<object> knapsack, object * o, int depth, double targetValue,
 // iterative deepening
 object * IDS(vector<object> knapsack, object * start, int maxDepth, double targetValue, double maximumWeight)
 {
-	for(int i = 0; i < maxDepth; i++)
+	for(int i = 1; i <= maxDepth; i++)
 	{
 		object * ans = DFS(knapsack, start, i, targetValue, maximumWeight);
 		if(ans != nullptr)
@@ -153,10 +187,11 @@ int main()
 	
 	if(ans != nullptr)
 	{
-		for(int i = 0; i < (ans->name).size(); i++)
-		{
-			cout << "Output: " << (ans->name)[i] << " ";
-		}
+		cout << "final ans->name.size(): " << (ans->name).size() << endl << flush;
+		// for(int i = 0; i < (ans->name).size(); i++)
+		// {
+			// cout << "Output: " << (ans->name)[i] << " ";
+		// }
 	}
 	
 	if(ans == nullptr)
