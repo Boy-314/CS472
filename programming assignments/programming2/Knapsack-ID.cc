@@ -65,11 +65,11 @@ object * DFS(vector<object> knapsack, object * o, int depth, double targetValue,
 	{
 		return o;
 	}
-	
+
 	// if depth is reached
 	if(depth == 0)
 	{
-		return NULL;
+		return nullptr;
 	}
 	
 	int lastIndex = (o->name).size() - 1;
@@ -87,14 +87,14 @@ object * DFS(vector<object> knapsack, object * o, int depth, double targetValue,
 				newName.push_back((knapsack[i].name)[0]);
 				object child = {newName, o->value + knapsack[i].value, o->weight + knapsack[i].weight};
 				object * ans = DFS(knapsack, &child, depth - 1, targetValue, maximumWeight);
-				if(ans != NULL)
+				if(ans != nullptr)
 				{
 					return ans;
 				}
 			}
 		}
 	}
-	return NULL;
+	return nullptr;
 }
 
 
@@ -104,12 +104,22 @@ object * IDS(vector<object> knapsack, object * start, int maxDepth, double targe
 	for(int i = 0; i < maxDepth; i++)
 	{
 		object * ans = DFS(knapsack, start, i, targetValue, maximumWeight);
-		if(ans != NULL)
+		if(ans != nullptr)
 		{
 			return ans;
 		}
 	}
-	return NULL;
+	return nullptr;
+}
+
+vector<string> split(string str)
+{
+	vector<string> ret;
+	for(int i = 0; i < str.length(); i++)
+	{
+		ret.push_back(str.substr(i,1));
+	}
+	return ret;
 }
 
 int main()
@@ -128,11 +138,7 @@ int main()
 	inputFile >> targetValue >> maximumWeight;
 	while(inputFile >> nameString >> value >> weight)
 	{
-		vector<string> name;
-		for(int i = 0; i < nameString.length(); i++)
-		{
-			name.push_back(name[i]);
-		}
+		vector<string> name = split(nameString);
 		object item = {name,value,weight};
 		knapsack.push_back(item);
 	}
@@ -145,7 +151,7 @@ int main()
 	object start = {startingName, 0, 0};
 	object * ans = IDS(knapsack, &start, maxDepth, targetValue, maximumWeight);
 	
-	if(ans != NULL)
+	if(ans != nullptr)
 	{
 		for(int i = 0; i < (ans->name).size(); i++)
 		{
@@ -153,9 +159,9 @@ int main()
 		}
 	}
 	
-	if(ans == NULL)
+	if(ans == nullptr)
 	{
-		
+		cout << "Output: No solution";
 	}
 	
 	return 0;
