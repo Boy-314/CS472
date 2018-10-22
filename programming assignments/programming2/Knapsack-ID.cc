@@ -90,12 +90,12 @@ object * DFS(vector<object> knapsack, object * o, int depth, double targetValue,
 			{
 				vector<string> newName = o->name;
 				newName.push_back((knapsack[i].name)[0]);
-				// cout << endl;
-				// for(int i = 0; i < newName.size(); i++)
-				// {
-					// cout << newName[i];
-				// }
-				// cout << endl;
+				cout << endl;
+				for(int i = 0; i < newName.size(); i++)
+				{
+					cout << newName[i];
+				}
+				cout << endl;
 				object child = {newName, o->value + knapsack[i].value, o->weight + knapsack[i].weight};
 				object * ans = DFS(knapsack, &child, depth - 1, targetValue, maximumWeight);
 				if(ans != nullptr)
@@ -113,12 +113,12 @@ object * DFS(vector<object> knapsack, object * o, int depth, double targetValue,
 			{
 				vector<string> newName = o->name;
 				newName.push_back((knapsack[i].name)[0]);
-				// cout << endl;
-				// for(int i = 0; i < newName.size(); i++)
-				// {
-					// cout << newName[i];
-				// }
-				// cout << endl;
+				cout << endl;
+				for(int i = 0; i < newName.size(); i++)
+				{
+					cout << newName[i];
+				}
+				cout << endl;
 				object child = {newName, o->value + knapsack[i].value, o->weight + knapsack[i].weight};
 				object * ans = DFS(knapsack, &child, depth - 1, targetValue, maximumWeight);
 				if(ans != nullptr)
