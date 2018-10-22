@@ -11,6 +11,7 @@ using namespace std;
 
 /*
 Iterative Deepening for Solving Knapsack Problem
+NOTE: Lines 95 - 98, and lines 119 - 122 are my print out statements. Uncommenting on lines 104, 128, and/or 195 will yield weird results
 */
 
 /*
@@ -90,16 +91,17 @@ object * DFS(vector<object> knapsack, object * o, int depth, double targetValue,
 			{
 				vector<string> newName = o->name;
 				newName.push_back((knapsack[i].name)[0]);
-				// cout << endl;
-				// for(int i = 0; i < newName.size(); i++)
-				// {
-					// cout << newName[i];
-				// }
-				// cout << endl;
+				cout << endl;
+				for(int j = 0; j < newName.size(); j++)
+				{
+					cout << newName[j];
+				}
+				cout << endl;
 				object child = {newName, o->value + knapsack[i].value, o->weight + knapsack[i].weight};
 				object * ans = DFS(knapsack, &child, depth - 1, targetValue, maximumWeight);
 				if(ans != nullptr)
 				{
+					// cout << "current ans.size(): " << (ans->name).size() << endl << flush;
 					return ans;
 				}
 			}
@@ -113,16 +115,17 @@ object * DFS(vector<object> knapsack, object * o, int depth, double targetValue,
 			{
 				vector<string> newName = o->name;
 				newName.push_back((knapsack[i].name)[0]);
-				// cout << endl;
-				// for(int i = 0; i < newName.size(); i++)
-				// {
-					// cout << newName[i];
-				// }
-				// cout << endl;
+				cout << endl;
+				for(int j = 0; j < newName.size(); j++)
+				{
+					cout << newName[j];
+				}
+				cout << endl;
 				object child = {newName, o->value + knapsack[i].value, o->weight + knapsack[i].weight};
 				object * ans = DFS(knapsack, &child, depth - 1, targetValue, maximumWeight);
 				if(ans != nullptr)
 				{
+					// cout << "current ans.size(): " << (ans->name).size() << endl << flush;
 					return ans;
 				}
 			}
@@ -140,6 +143,7 @@ object * IDS(vector<object> knapsack, object * start, int maxDepth, double targe
 		object * ans = DFS(knapsack, start, i, targetValue, maximumWeight);
 		if(ans != nullptr)
 		{
+			// cout << "current ans.size(): " << (ans->name).size() << endl << flush;
 			return ans;
 		}
 	}
@@ -168,6 +172,7 @@ int main()
 	double value, weight;
 	
 	// read the file and process input into knapsack vector
+	// REPLACE WITH YOUR TEST FILENAME HERE
 	ifstream inputFile("input.txt");
 	inputFile >> targetValue >> maximumWeight;
 	while(inputFile >> nameString >> value >> weight)
@@ -187,7 +192,7 @@ int main()
 	
 	if(ans != nullptr)
 	{
-		cout << "final ans->name.size(): " << (ans->name).size() << endl << flush;
+		// cout << "final ans->name.size(): " << (ans->name).size() << endl << flush;
 		// for(int i = 0; i < (ans->name).size(); i++)
 		// {
 			// cout << "Output: " << (ans->name)[i] << " ";
