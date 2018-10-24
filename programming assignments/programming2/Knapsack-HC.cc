@@ -104,6 +104,54 @@ object * hillClimbing(vector<object> knapsack, object * o, double targetValue, d
 		}
 		
 		// try swapping an element from inside the state from one not inside the state
+		for(int i = 0; i < knapsack.size(); i++)
+		{
+			// find element not inside state
+			bool exist = false;
+			string element = knapsack[i].name[0];
+			for(int j = 0; j < (o->name).size(); j++)
+			{
+				if(element == (o->name)[j])
+				{
+					exist = true;
+				}
+			}
+			if(exist)
+			{
+				continue;
+			}
+			
+			// otherwise try adding element, remove another element to emulate the "swap"
+			else if(!exist)
+			{
+				for(int j = 0; j < (o->name).size(); j++)
+				{
+					vector<string> newName = o->name;
+					int index = 0;
+					while(knapsack[index].name[0] != (o->name)[j])
+					{
+						index++;
+					}
+					
+					newName.erase(newName.begin() + j);
+					newName.push_back(knapsack[i].name[0];
+					object swap = {newName, o->value - knapsack[index].value + knapsack[i].value, o->weight - knapsack[index].weight + knapsack[i].weight};
+					futureError = findError(&swap, targetValue, maximumWeight);
+					minError.push_back(futureError);
+				}
+			}
+		}
+		
+		stable_sort(minError.begin(), minError.end());
+		futureError = minError[0];
+		if(futureError < currentError)
+		{
+			currentError = futureError;
+		}
+		else if(futureError >= currentError)
+		{
+			// TODO: random restart
+		}
 	}
 }
 
