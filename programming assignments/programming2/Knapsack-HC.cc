@@ -5,6 +5,7 @@
 #include <map>
 #include <queue>
 #include <stack>
+#include <stdlib.h>
 #include <string>
 #include <vector>
 using namespace std;
@@ -134,7 +135,7 @@ object * hillClimbing(vector<object> knapsack, object * o, double targetValue, d
 					}
 					
 					newName.erase(newName.begin() + j);
-					newName.push_back(knapsack[i].name[0];
+					newName.push_back(knapsack[i].name[0]);
 					object swap = {newName, o->value - knapsack[index].value + knapsack[i].value, o->weight - knapsack[index].weight + knapsack[i].weight};
 					futureError = findError(&swap, targetValue, maximumWeight);
 					minError.push_back(futureError);
@@ -144,13 +145,15 @@ object * hillClimbing(vector<object> knapsack, object * o, double targetValue, d
 		
 		stable_sort(minError.begin(), minError.end());
 		futureError = minError[0];
-		if(futureError < currentError)
+		if(futureError >= currentError)
+		{
+			int randIndex = rand() % knapsack.size();
+			object randomRestart = {knapsack[randIndex].name, knapsack[randIndex].value, knapsack[randIndex].weight};
+			currentError = findError(&randomRestart, targetValue, maximumWeight);
+		}		
+		else if(futureError < currentError)
 		{
 			currentError = futureError;
-		}
-		else if(futureError >= currentError)
-		{
-			// TODO: random restart
 		}
 	}
 }
@@ -193,6 +196,21 @@ int main()
 	// run iterative deepening
 	vector<string> startingName;
 	object start = {startingName, 0, 0};
+	
+	object * ans = hillClimbing(knapsack, &start, targetValue, maximumWeight);
+	if(ans != nullptr)
+	{
+		// cout << "final ans->name.size(): " << (ans->name).size() << endl << flush;
+		for(int i = 0; i < (ans->name).size(); i++)
+		{
+			cout << "Output: " << (ans->name)[i] << " ";
+		}
+	}
+	
+	if(ans == nullptr)
+	{
+		cout << "Output: No solution";
+	}
 	
 	return 0;
 }
