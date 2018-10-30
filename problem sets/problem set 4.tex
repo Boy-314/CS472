@@ -1,0 +1,132 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{wasysym}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsthm}
+\usepackage{braket}
+\usepackage{microtype}
+\usepackage{amssymb}
+\usepackage{listings}
+\usepackage{tikz}
+\usepackage{soul}
+\usetikzlibrary{trees}
+\newcommand{\Mod}[1]{\ (\mathrm{mod}\ #1)}
+\begin{document}
+\title{Artifical Intelligence Problem Set 4}
+\date{}
+\author{Willie Yee}
+\maketitle
+\noindent
+\textbf{Problem 1.}
+\begin{enumerate}
+	\item $A\implies\neg(B\wedge C)$
+	\item $C\iff\neg(D\vee E)$
+	\item $D\implies B$
+	\item $(D\wedge E)\implies\neg B\wedge A$
+	\item $D\iff E$\\
+\end{enumerate}
+\begin{enumerate}
+	\item $\neg A\vee\neg B\vee\neg C$
+	\item $(C\implies\neg(D\vee E))\wedge(\neg(D\vee E)\implies C)$
+	\item $\neg D\wedge B$
+	\item $(\neg D\vee\neg E)\vee(\neg B\wedge A)$
+	\item $(D\implies E)\wedge(E\implies D)$\\
+\end{enumerate}
+\begin{enumerate}
+	\item $\neg A\vee\neg B\vee\neg C$
+	\item $(\neg C\vee(\neg D\wedge\neg E))\wedge((\neg D\wedge\neg E)\vee C)$
+	\item $\neg D\wedge B$
+	\item $(\neg D\vee\neg E\vee\neg B)\wedge(\neg D\vee\neg E\vee A)$
+	\item $(\neg D\vee E)\wedge(\neg E\vee D)$\\
+\end{enumerate}
+\begin{enumerate}
+	\item $\neg A\vee\neg B\vee\neg C$
+	\item $(\neg C\vee\neg D)\wedge(\neg C\vee\neg E)\wedge(C\vee\neg D)\wedge(C\vee\neg E)$
+	\item $\neg D\wedge B$
+	\item $(\neg D\vee\neg E\vee\neg B)\wedge(\neg D\vee\neg E\vee A)$
+	\item $(\neg D\vee E)\wedge(\neg E\vee D)$\\
+\end{enumerate}
+Final answer in CNF:\\
+\begin{enumerate}
+	\item $\neg A\vee\neg B\vee\neg C$
+	\item $\neg C\vee\neg D$
+	\item $\neg C\vee\neg E$
+	\item $C\vee\neg D$
+	\item $C\vee\neg E$
+	\item $\neg D\wedge B$
+	\item $\neg D\vee\neg E\vee\neg B$
+	\item $\neg D\vee\neg E\vee A$
+	\item $\neg D\vee E$
+	\item $\neg E\vee D$
+\end{enumerate}
+\textbf{Problem 2.} Choice 1: A = TRUE
+\begin{enumerate}
+	\item $\neg B\vee\neg C$
+	\item $\neg C\vee\neg D$
+	\item $\neg C\vee\neg E$
+	\item $C\vee\neg D$
+	\item $C\vee\neg E$
+	\item $\neg D\wedge B$
+	\item $\neg D\vee\neg E\vee\neg B$
+	\item $\neg D\vee E$
+	\item $\neg E\vee D$
+\end{enumerate}
+Choice 2: B = TRUE
+\begin{enumerate}
+	\item $\neg C$
+	\item $\neg C\vee\neg D$
+	\item $\neg C\vee\neg E$
+	\item $C\vee\neg D$
+	\item $C\vee\neg E$
+	\item $\neg D\vee\neg E$
+	\item $\neg D\vee E$
+	\item $\neg E\vee D$
+\end{enumerate}
+\st{Choice 3: C = TRUE} results in failing statement 1. Revert back to choice 2 and try B = FALSE
+\begin{enumerate}
+	\item $\neg C\vee\neg D$
+	\item $\neg C\vee\neg E$
+	\item $C\vee\neg D$
+	\item $C\vee\neg E$
+	\item $\neg D$
+	\item $\neg D\vee E$
+	\item $\neg E\vee D$
+\end{enumerate}
+Choice 3: C = TRUE
+\begin{enumerate}
+	\item $\neg D$
+	\item $\neg E$
+	\item $\neg D$
+	\item $\neg D\vee E$
+	\item $\neg E\vee D$
+\end{enumerate}
+D = FALSE, E = FALSE\\
+Final solution: A = TRUE, B = FALSE, C = TRUE, D = FALSE, E = FALSE\\
+\\
+\textbf{Problem 3.}
+\begin{enumerate}
+	\item For each index X, there is at least one vertex at position X. We can think of this as either AX or BX or CX ... or KX is true.
+	\item No vertex is at more than one position in the list. We can think of this as not(A1 and A2), or any combination of two indices with one vertex. So in the general case, with any vertex V, and any two indices $X_1$ and $X_2$, we want $\neg(VX_1\wedge VX_2)$.
+	\item No position in the list is occupied by two vertices. Given two vertices, $V_1$ and $V_2$, we want them to not share the same position X. So in the general case, we want $\neg(V_1X\wedge V_2X)$.
+	\item If two vertices are not connected in the graph, then they are not both in the list, in any positions. We have to see the composition of the graph to give a definitive list of sentences for this constraint. Anyhow, we can represent this as $\neg(V_1X_1\wedge V_2X_2)$ where $V_1$, $V_2$ are vertices such that they do not have an edge between them, and $X_1$ and $X_2$ are two indices.
+\end{enumerate}
+For the specific example:
+\begin{enumerate}
+	\item \begin{itemize}
+		  	\item $A1\vee A2\vee A3\vee A4$
+		  	\item $B1\vee B2\vee B3\vee B4$
+		  \end{itemize}
+	\item \begin{itemize}
+			\item $\neg(A1\wedge A2)$
+			\item $\neg(A1\wedge A3)$
+		  \end{itemize}
+	\item \begin{itemize}
+			\item $\neg(A1\wedge B1)$
+			\item $\neg(A1\wedge C1)$
+		  \end{itemize}
+	\item \begin{itemize}
+			\item $\neg(A1\wedge C2)$
+			\item $\neg(A1\wedge C3)$
+		  \end{itemize}
+\end{enumerate}
+\end{document}

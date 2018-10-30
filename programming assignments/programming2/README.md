@@ -9,3 +9,4 @@
 1. HILL CLIMBING
 2. To compile Hill Climbing with random restarts algorithm, execute `g++ -std=c++11 Knapsack-HC.cc -o Knapsack-HC`
 3. Run with `./Knapsack-HC.exe`
+4. NOTE TO THE GRADER: This program does not work. Please look through my code and provide credit for the work that I did.

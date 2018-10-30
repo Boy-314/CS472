@@ -1,0 +1,31 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{wasysym}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsthm}
+\usepackage{braket}
+\usepackage{microtype}
+\usepackage{amssymb}
+\usepackage{listings}
+\usepackage{tikz}
+\usetikzlibrary{trees}
+\newcommand{\Mod}[1]{\ (\mathrm{mod}\ #1)}
+\begin{document}
+\title{Artifical Intelligence Problem Set 5}
+\date{}
+\author{Willie Yee}
+\maketitle
+\noindent
+\textbf{Problem 1.}
+\begin{description}
+	\item [A.] Amy and Barry both sing "Yesterday". $$S(A,Y)\wedge S(B,Y)$$
+	\item [B.] Amy does not sing any songs that Barry wrote. $$\forall_s, S(A,s)\implies\neg C(B,s)$$
+	\item [C.] David does sing some songs that Barry wrote. $$\exists_s, S(D,s)\wedge C(B,s)$$
+	\item [D.] David likes all the songs that Amy and Barry both sing. $$\forall_s, (S(A,s)\wedge S(B,s))\implies L(D,s)$$
+	\item [E.] Barry has not written any songs in a major key. $$\forall_s, C(B,s)\vee M(s)$$
+	\item [F.] There is someone who dislikes "Yesterday". $$\exists_p, \neg L(p,Y)$$
+	\item [G.] There is someone who dislikes all the songs that David wrote. $$\exists_p,\forall_s C(D,s)\implies\neg L(p,s)$$
+	\item [H.] There is a songwriter who has written some songs, but not any that Amy likes. $$\exists_p, \exists_{s_1}, C(p,s_1)\wedge\forall_{s_2},\neg L(A,s_2)\vee\neg C(p,s_2)$$
+	\item [I.] If a person dislikes "Yesterday" then the only songs they like are those they wrote themselves. $$\forall_p, \neg L(p,Y)\implies (\forall_s, L(p,s)\implies C(p,s))$$
+\end{description}
+\end{document}

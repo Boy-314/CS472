@@ -45,7 +45,7 @@ double findError(object * o, double targetValue, double maximumWeight)
 }
 
 // hill climbing
-object * hillClimbing(vector<object> knapsack, object * o, double targetValue, double maximumWeight)
+object * hillClimbing(vector<object> knapsack, object * o, double targetValue, double maximumWeight, int restart)
 {
 	double currentError = findError(o, targetValue, maximumWeight);
 	double futureError = findError(o, targetValue, maximumWeight);
@@ -145,12 +145,16 @@ object * hillClimbing(vector<object> knapsack, object * o, double targetValue, d
 		
 		stable_sort(minError.begin(), minError.end());
 		futureError = minError[0];
-		if(futureError >= currentError)
+		// if no improvement in error, random restart
+		if(futureError >= currentError && restart > 0)
 		{
 			int randIndex = rand() % knapsack.size();
 			object randomRestart = {knapsack[randIndex].name, knapsack[randIndex].value, knapsack[randIndex].weight};
 			currentError = findError(&randomRestart, targetValue, maximumWeight);
-		}		
+			restart--;
+		}
+
+		// otherwise update the error
 		else if(futureError < currentError)
 		{
 			currentError = futureError;
@@ -197,7 +201,7 @@ int main()
 	vector<string> startingName;
 	object start = {startingName, 0, 0};
 	
-	object * ans = hillClimbing(knapsack, &start, targetValue, maximumWeight);
+	object * ans = hillClimbing(knapsack, &start, targetValue, maximumWeight, 10);
 	if(ans != nullptr)
 	{
 		// cout << "final ans->name.size(): " << (ans->name).size() << endl << flush;

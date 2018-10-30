@@ -8,6 +8,7 @@
 #include <stack>
 #include <stdlib.h>
 #include <string>
+#include <unordered_set>
 #include <vector>
 using namespace std;
 
@@ -68,12 +69,6 @@ int main()
 	}
 	
 	// rule: cannot go from edge at time t to edge at time t + 1 if there is no edge between the two
-	/*
-	for all the edges that are not in the graph
-		for all the vertices
-			not edgebegin or not edgeend
-	*/
-	
 	// create a complete graph
 	vector<edge> complete_graph;
 	for(auto i : vertices)
@@ -90,14 +85,31 @@ int main()
 	}
 	
 	// create a graph that contains all edges that our graph does not contain
-	vector<edge> missing_edges;
-	for(int i = 0; i < complete_graph.size(); i++)
+	vector<edge> missing_edges = complete_graph;
+	for(int i = 0; i < graph.size(); i++)
 	{
-		for(int j = 0; j < edges.size(); j++)
+		int index = 0;
+		while(missing_edges[index].vertex_start != graph[i].vertex_start || missing_edges[index].vertex_end != graph[i].vertex_end)
 		{
-			if(edges[j].vertex_start != complete_graph[i].vertex_start && edges[j].vertex_end != complete_graph[i].vertex_end)
+			index++;
+		}
+		missing_edges.erase(missing_edges.begin() + index);
+	}
+	
+	// create rule: cannot go from one edge at time t to another edge at time t + 1 if there is no edge from the first edge to the second
+	for(int i = 0; i < missing_edges.size(); i++)
+	{
+		int time = 1;
+		while(time + 1 <= num_of_vertices)
+		{
+			cout << "-" << missing_edges[i].vertex_start << time << " -" << missing_edges[i].vertex_end << time + 1 << endl;
+			time++;
 		}
 	}
+	
+	// optional rule: at every time there is a vertex
+	
+	// optinoal rule: no vertex is traversed more than once
 	
 	return 0;
 }
