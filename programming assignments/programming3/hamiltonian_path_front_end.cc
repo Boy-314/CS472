@@ -238,6 +238,7 @@ int main()
 		}
 	}
 	
+	front_end_output_file << 0;
 	front_end_output_file.close();
 	
 	return 0;
