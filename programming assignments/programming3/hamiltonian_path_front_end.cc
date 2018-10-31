@@ -197,46 +197,45 @@ int main()
 	}
 	
 	// optinoal rule: no vertex is traversed more than once
-	for(auto i : vertices)
-	{
-		int time_one = 1;
+	// for(auto i : vertices)
+	// {
+		// int time_one = 1;
 		
-		while(time_one <= num_of_vertices)
-		{
-			int time_two = 1;
-			while(time_two <= num_of_vertices)
-			{
-				if(time_one == time_two)
-				{
-					time_two++;
-					continue;
-				}
-				int index_one = 999999;
-				int index_two = 999999;
-				string atom_one;
-				string atom_two;
-				atom_one = i;
-				atom_one += to_string(time_one);
-				atom_two = i;
-				atom_two += to_string(time_two);
-				for(int j = 0; j < all_atoms.size(); j++)
-				{
-					if(all_atoms[j] == atom_one)
-					{
-						index_one = j + 1;
-					}
-					if(all_atoms[j] == atom_two)
-					{
-						index_two = j + 1;
-					}
-				}
-				// front_end_output_file << "-" << i << time_one << " -" << i << time_two << endl;
-				front_end_output_file << "-" << index_one << " -" << index_two << endl;
-				time_two++;
-			}
-			time_one++;
-		}
-	}
+		// while(time_one <= num_of_vertices)
+		// {
+			// int time_two = 1;
+			// while(time_two <= num_of_vertices)
+			// {
+				// if(time_one == time_two)
+				// {
+					// time_two++;
+					// continue;
+				// }
+				// int index_one = 999999;
+				// int index_two = 999999;
+				// string atom_one;
+				// string atom_two;
+				// atom_one = i;
+				// atom_one += to_string(time_one);
+				// atom_two = i;
+				// atom_two += to_string(time_two);
+				// for(int j = 0; j < all_atoms.size(); j++)
+				// {
+					// if(all_atoms[j] == atom_one)
+					// {
+						// index_one = j + 1;
+					// }
+					// if(all_atoms[j] == atom_two)
+					// {
+						// index_two = j + 1;
+					// }
+				// }
+				// front_end_output_file << "-" << index_one << " -" << index_two << endl;
+				// time_two++;
+			// }
+			// time_one++;
+		// }
+	// }
 	
 	front_end_output_file << 0;
 	front_end_output_file.close();

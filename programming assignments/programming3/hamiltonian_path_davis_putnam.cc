@@ -19,6 +19,124 @@ struct clause
 	vector<int> atoms;
 };
 
+// methods for comparing clause objects
+bool operator!=(const clause& lhs, const clause& rhs)
+{
+	if(lhs.atoms.size() != rhs.atoms.size())
+	{
+		return true;
+	}
+	else if(lhs.atoms.size() == rhs.atoms.size())
+	{
+		for(int i = 0; i < lhs.atoms.size(); i++)
+		{
+			if(lhs.atoms[i] != rhs.atoms[i])
+			{
+				return true;
+			}
+		}
+	}
+	else
+	{
+		return false;
+	}
+}
+
+bool operator==(const clause& lhs, const clause& rhs)
+{
+	if(lhs.atoms.size() != rhs.atoms.size())
+	{
+		return false;
+	}
+	else if(lhs.atoms.size() == rhs.atoms.size())
+	{
+		for(int i = 0; i < lhs.atoms.size(); i++)
+		{
+			if(lhs.atoms[i] != rhs.atoms[i])
+			{
+				return false;
+			}
+		}
+	}
+	else
+	{
+		return true;
+	}
+}
+
+/*
+propagate the effect of assigning atom A to be value V.
+delete every clause where A appears with sign V.
+delete every literal where A appears with sign not V.
+*/
+vector<clause> propagate(int A, vector<clause> S, vector<int> V)
+{
+	// for each clause C in S
+	for(auto C : S)
+	{
+		// if A in C and V[A] == TRUE or ~A in C and V[A] == FALSE
+		if(((find((C.atoms).begin(), (C.atoms).end(), A) != (C.atoms).end()) && (V[A] == 1)) && (((find((C.atoms).begin(), (C.atoms).end(), -A) != (C.atoms).end()) && (V[A] == 0))))
+		{
+			// delete C from S
+			int index = 0;
+			while(S[index] != C)
+			{
+				index++;
+			}
+			S.erase(S.begin() + index);
+		}
+		// else if A in C and V[A] == FALSE
+		else if((find((C.atoms).begin(), (C.atoms).end(), A) != (C.atoms).end()) && (V[A] == 0))
+		{
+			// delete A from C in S
+			int index = 0;
+			while((C.atoms)[index] != A)
+			{
+				index++;
+			}
+			int counter = 0;
+			while(S[counter] != C)
+			{
+				counter++;
+			}
+			(S[counter].atoms).erase((S[counter].atoms).begin() + index);
+		}
+		// else if ~A in C and V[A] == TRUE
+		else if((find((C.atoms).begin(), (C.atoms).end(), -A) != (C.atoms).end()) && (V[A] == 1))
+		{
+			// delete ~A from C in S
+			int index = 0;
+			while((C.atoms)[index] != -A)
+			{
+				index++;
+			}
+			int counter = 0;
+			while(S[counter] != C)
+			{
+				counter++;
+			}
+			(S[counter].atoms).erase((S[counter].atoms).begin() + index);
+		}
+	}
+	return S;
+}
+
+/*
+given a literal L with atom A, make V[A] the sign indicated by L.
+*/
+vector<int> obviousAssign(int L, vector<int> V)
+{
+	if(L > 0)
+	{
+		V[L] = 1;
+	}
+	else if(L < 0)
+	{
+		V[L] = 0;
+	}
+	return V;
+}
+
 /*
 dp(in  ATOMS : set of propositional atoms; S : Set of propositional formulas in CNF)
 {
@@ -31,6 +149,52 @@ dp(in  ATOMS : set of propositional atoms; S : Set of propositional formulas in 
 	}	
 }
 */
+
+// method to check if there are any pure literals
+int pure_literals(vector<int> ATOMS, vector<clause> S, vector<int> V)
+{
+	int literal = 0;
+	bool exists = true;
+	for(auto atom : ATOMS)
+	{
+		bool pos_flag = false;
+		bool neg_flag = false;
+		for(auto C : S)
+		{
+			for(auto a : C.atoms)
+			{
+				if(!pos_flag && !neg_flag)
+				{
+					if(a == atom)
+					{
+						pos_flag = true;
+					}
+					if(-a == atom)
+					{
+						neg_flag = true;
+					}
+				}
+				else if(pos_flag)
+				{
+					if(-a == atom)
+					{
+						literal = atom;
+						exists = false;
+					}
+				}
+				else if(neg_flag)
+				{
+					if(a == atom)
+					{
+						literal = atom;
+						exists = false;
+					}
+				}
+			}
+		}
+	}
+	return literal;
+}
 
 /*
 dp1(ATOMS,S,V)
@@ -77,7 +241,7 @@ dp1(ATOMS,S,V)
 	S1 = copy(S);
 	S1 = propagate(A,S1,V);
 	VNEW = dp1(ATOMS,S1,V);
-	if(VNEW != NULL)
+	if(VNEW != NIL)
 	{
 		return VNEW; // found a satisfying valuation
 	}
@@ -88,46 +252,52 @@ dp1(ATOMS,S,V)
 	return(dp1(ATOMS,S1,V)); // either found a satisfying valuation or backtrack
 }
 */
-
-/*
-// propagate the effect of assigning atom A to be value V.
-// delete every clause where A appears with sign V.
-// delete every literal where A appears with sign not V.
-propagate(A,S,V)
+vector<int> dp1(vector<int> ATOMS, vector<clause> S, vector<int> V)
 {
-	for(each clause C in S)
+	// loop as long as there are easy cases to cherry pick
+	while(true)
 	{
-		if((A in C and V[A] == FALSE) or (~A in C and V[A] == FALSE))
+		// check if any clause in S is empty
+		bool is_empty = false;
+		for(auto C : S)
 		{
-			delete C from S
+			if((C.atoms).empty())
+			{
+				is_empty = true;
+			}
 		}
-		else if(A in C and V[A] == FALSE)
+		
+		// base case
+		// success: all clauses are satisfied
+		if(S.empty())
 		{
-			delete A from C
+			for(auto A : ATOMS)
+			{
+				if(V[A] == -1)
+				{
+					V[A] = 1;
+				}
+				return V;
+			}
 		}
-		else if(~A in C and V[A] == TRUE)
+		// failure: some clause is unsatisfiable under V
+		else if(is_empty)
 		{
-			delete ~A from C
+			vector<int> NIL;
+			return NIL;
+		}
+		
+		// easy cases: pure literal elimination and forced assignment
+		// pure literal elimination such that the negation of L does not appear in S
+		else if(pure_literals(ATOMS, S, V) != 0)
+		{
+			int L = pure_literals(ATOMS, S, V);
+			V = obviousAssign(L,V);
+			// delete every clause containing L from S
+			
 		}
 	}
-	return S;
 }
-*/
-
-/*
-// given a literal L with atom A, make V[A] the sign indicated by L.
-obviousAssign(L,V)
-{
-	if(L is an atom A)
-	{
-		V[A] = TRUE;
-	}
-	else if(L has the form ~A)
-	{
-		V[A] = FALSE;
-	}
-}
-*/
 
 int main()
 {
@@ -147,14 +317,6 @@ int main()
 		}
 		clause atoms = {temp};
 		set_of_clauses.push_back(atoms);
-	}
-	for(int i = 0; i < set_of_clauses.size(); i++)
-	{
-		for(int j = 0; j < set_of_clauses[i].atoms.size(); j++)
-		{
-			cout << set_of_clauses[i].atoms[j] << " ";
-		}
-		cout << endl;
 	}
 	return 0;
 }
