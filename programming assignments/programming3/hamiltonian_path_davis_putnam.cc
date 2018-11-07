@@ -128,11 +128,11 @@ vector<int> obviousAssign(int L, vector<int> V)
 {
 	if(L > 0)
 	{
-		V[L] = 1;
+		V[L - 1] = 1;
 	}
 	else if(L < 0)
 	{
-		V[L] = 0;
+		V[-L - 1] = 0;
 	}
 	return V;
 }
@@ -216,13 +216,13 @@ vector<int> dp1(vector<int> ATOMS, vector<clause> S, vector<int> V)
 		{
 			for(int A = 0; A < ATOMS.size(); A++)
 			{
-				cout << "A: " << A << endl;
+				// cout << "A: " << A << endl;
 				if(V[A] == -1)
 				{
 					V[A] = 1;
 				}
-				return V;
 			}
+			return V;
 		}
 		// failure: some clause is unsatisfiable under V
 		else if(is_empty)
@@ -236,8 +236,16 @@ vector<int> dp1(vector<int> ATOMS, vector<clause> S, vector<int> V)
 		else if(pure_literals(ATOMS, S, V) != 0)
 		{
 			int L = pure_literals(ATOMS, S, V);
-			cout << "pure literal\n";	
+			// cout << "pure literal: " << L << "\n";	
 			V = obviousAssign(L,V);
+			// if(L < 0)
+			// {
+				// cout << "V[" << -L << "]: " << V[-L] << endl;
+			// }
+			// if(L > 0)
+			// {
+				// cout << "V[" << L << "]: " << V[L] << endl;
+			// }
 			
 			// delete every clause containing L from S
 			// vector<int> to_remove;
@@ -259,7 +267,7 @@ vector<int> dp1(vector<int> ATOMS, vector<clause> S, vector<int> V)
 				}
 				line_counter++;
 			}
-			cout << S.size() << endl;
+			// cout << S.size() << endl;
 		}
 		
 		// single literal forced assignment
@@ -331,7 +339,7 @@ int main()
 		clause atoms = {temp};
 		set_of_clauses.push_back(atoms);
 	}
-	
+	front_end_output_file.close();
 	int counter = 0;
 	while(set_of_clauses[counter].atoms[0] > 0)
 	{
@@ -347,31 +355,33 @@ int main()
 		V.push_back(-1);
 	}
 	set_of_clauses.erase(set_of_clauses.begin() + set_of_clauses.size());
-	for(auto i : set_of_clauses)
-	{
-		for(auto j : i.atoms)
-		{
-			cout << j;
-		}
-		cout << endl;
-	}
+	// for(auto i : set_of_clauses)
+	// {
+		// for(auto j : i.atoms)
+		// {
+			// cout << j;
+		// }
+		// cout << endl;
+	// }
 	vector<int> output = dp1(ATOMS, set_of_clauses, V);
-	ifstream davis_putnam_output_file;
+	ofstream davis_putnam_output_file;
 	davis_putnam_output_file.open("DavisPutnamOutput.txt");
 	counter = 0;
+	// cout << output.size() << endl;
 	for(auto i : output)
 	{
-		cout << "i: " << i << endl;
+		// cout << i << endl;
 		counter++;
 		if(i == 0)
 		{
-			cout << counter << " F\n";
+			davis_putnam_output_file << counter << " F\n";
 		}
 		if(i == 1)
 		{
-			cout << counter << " T\n";
+			davis_putnam_output_file << counter << " T\n";
 		}
 	}
+	davis_putnam_output_file << 0;
 	davis_putnam_output_file.close();
 	return 0;
 }
