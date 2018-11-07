@@ -325,9 +325,6 @@ int main()
 		set_of_clauses.push_back(atoms);
 	}
 	
-	// TODO: 
-	// 		 
-	//		 call dp1 method
 	int counter = 0;
 	while(set_of_clauses[counter].atoms[0] > 0)
 	{
