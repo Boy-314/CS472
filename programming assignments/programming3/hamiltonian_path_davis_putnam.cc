@@ -137,123 +137,66 @@ vector<int> obviousAssign(int L, vector<int> V)
 	return V;
 }
 
-/*
-dp(in  ATOMS : set of propositional atoms; S : Set of propositional formulas in CNF)
-{
-	V : array[ATOMS];
-
-	for (A in ATOMS) 
-	{
-		do V[A] = UNBOUND;
-		return dp1(ATOMS,S,V)
-	}	
-}
-*/
-
 // method to check if there are any pure literals
 int pure_literals(vector<int> ATOMS, vector<clause> S, vector<int> V)
 {
-	int literal = 0;
-	bool exists = true;
-	for(auto atom : ATOMS)
+	bool p_literal = true;
+	// iterate through each atom in S
+	for(auto line : S)
 	{
-		bool pos_flag = false;
-		bool neg_flag = false;
-		for(auto C : S)
+		for(auto atom : line.atoms)
 		{
-			for(auto a : C.atoms)
+			// check if its negation appears
+			for(auto check_line : S)
 			{
-				if(!pos_flag && !neg_flag)
+				p_literal = true;
+				for(auto check_atom : line.atoms)
 				{
-					if(a == atom)
+					if(check_atom == -atom)
 					{
-						pos_flag = true;
-					}
-					if(-a == atom)
-					{
-						neg_flag = true;
+						p_literal = false;
+						break;
 					}
 				}
-				else if(pos_flag)
+				if(!p_literal)
 				{
-					if(-a == atom)
-					{
-						literal = atom;
-						exists = false;
-					}
+					break;
 				}
-				else if(neg_flag)
-				{
-					if(a == atom)
-					{
-						literal = atom;
-						exists = false;
-					}
-				}
+			}
+			if(p_literal)
+			{
+				return atom;
 			}
 		}
 	}
-	return literal;
+	return 0;
 }
 
-/*
-dp1(ATOMS,S,V)
+// method to check if there are any single literals
+bool single_literals(vector<int> ATOMS, vector<clause> S, vector<int> V)
 {
-	loop
+	bool exists = true;
+	for(auto line : S)
 	{
-		// base case:
-		if(S is empty) // all clauses are satisfied
+		if((line.atoms).size() == 1)
 		{
-			for(A in ATOMS)
-			{
-				if(V[a] == UNBOUND)
-				{
-					assign V[A] either TRUE or FALSE;
-				}
-				return V;
-			}
-		}
-		else if(some clause in S is empty) // failure: some clause is unsatisfiable under V
-		{
-			return NIL;
-		}
-		
-		// easy cases: pure literal elimination and forced assignment
-		else if(there exists a literal L in S such that the negation of L does not appear in S) // pure literal elimination
-		{
-			V = obviousAssign(L,V);
-			delete every clause containing L from S;
-		}
-		else if(there exists a clause C in S containing a single literal L) // forced assignment
-		{
-			V = obviousAssign(L,V);
-			S = propagate(atom(L), S, V);
-		}
-		else
-		{
-			break;
+			exists = true;
 		}
 	}
-	
-	// hard case: pick some atom and try each assignment in turn
-	pick atom A such that V[A] == UNBOUND; // try one assignment
-	V[A] = TRUE;
-	S1 = copy(S);
-	S1 = propagate(A,S1,V);
-	VNEW = dp1(ATOMS,S1,V);
-	if(VNEW != NIL)
+	if(exists)
 	{
-		return VNEW; // found a satisfying valuation
+		return true;
 	}
-	
-	// if V[A] = TRUE didn't work, try V[A] = FALSE;
-	V[A] = FALSE;
-	S1 = propagate(A,S,V);
-	return(dp1(ATOMS,S1,V)); // either found a satisfying valuation or backtrack
+	else
+	{
+		return false;
+	}
 }
-*/
+
+// vector V: -1 if UNBOUND, 0 if FALSE, 1 if TRUE
 vector<int> dp1(vector<int> ATOMS, vector<clause> S, vector<int> V)
 {
+	vector<int> NIL;
 	// loop as long as there are easy cases to cherry pick
 	while(true)
 	{
@@ -283,20 +226,82 @@ vector<int> dp1(vector<int> ATOMS, vector<clause> S, vector<int> V)
 		// failure: some clause is unsatisfiable under V
 		else if(is_empty)
 		{
-			vector<int> NIL;
 			return NIL;
 		}
 		
-		// easy cases: pure literal elimination and forced assignment
+		// easy cases: pure literal elimination and single literal forced assignment
+		
 		// pure literal elimination such that the negation of L does not appear in S
 		else if(pure_literals(ATOMS, S, V) != 0)
 		{
 			int L = pure_literals(ATOMS, S, V);
 			V = obviousAssign(L,V);
-			// delete every clause containing L from S
 			
+			// delete every clause containing L from S
+			vector<int> to_remove;
+			for(auto line : S)
+			{
+				vector<int>::iterator iter;
+				for(iter = (line.atoms).begin(); iter != (line.atoms).end(); )
+				{
+					if(*iter == L || *iter == -L)
+					{
+						iter = (line.atoms).erase(iter);
+					}
+					else
+					{
+						++iter;
+					}
+				}
+			}
+		}
+		
+		// single literal forced assignment
+		else if(single_literals(ATOMS, S, V))
+		{
+			// find the single literal
+			int L;
+			for(auto line : S)
+			{
+				if((line.atoms).size() == 1)
+				{
+					L = (line.atoms)[0];
+				}
+			}
+			V = obviousAssign(L,V);
+			S = propagate(L,S,V);
+		}
+		
+		// no easy cases found, exit the loop
+		else
+		{
+			break;
 		}
 	}
+	
+	// hard case: pick some atom and try each assignment in turn
+	int A;
+	for(auto atom : ATOMS)
+	{
+		if(V[atom] == -1)
+		{
+			A = atom;
+			break;
+		}
+	}
+	// set A to be true
+	V[A] = 1;
+	vector<clause> S1 = S;
+	S1 = propagate(A,S1,V);
+	vector<int> VNEW = dp1(ATOMS,S1,V);
+	if(VNEW != NIL)
+	{
+		return VNEW;
+	}
+	
+	V[A] = 0;
+	S1 = propagate(A,S,V);
+	return dp1(ATOMS,S1,V);
 }
 
 int main()
@@ -318,5 +323,9 @@ int main()
 		clause atoms = {temp};
 		set_of_clauses.push_back(atoms);
 	}
+	
+	// TODO: create vector of unique atoms
+	// 		 create V vector and initialize all values to -1
+	//		 call dp1 method
 	return 0;
 }

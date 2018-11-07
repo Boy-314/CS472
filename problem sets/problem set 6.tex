@@ -1,0 +1,54 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{wasysym}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsthm}
+\usepackage{braket}
+\usepackage{microtype}
+\usepackage{amssymb}
+\usepackage{listings}
+\usepackage{tikz}
+\usetikzlibrary{trees}
+\newcommand{\Mod}[1]{\ (\mathrm{mod}\ #1)}
+\begin{document}
+\title{Artifical Intelligence Problem Set 6}
+\date{}
+\author{Willie Yee}
+\maketitle
+\noindent
+\textbf{Problem 1.} 
+\begin{itemize}
+	\item Combining rule 1 with fact 4 with substitution $\{x\rightarrow\text{Mary},y\rightarrow\text{Henry},z\rightarrow\text{Catherine}\}$, \\
+	infer 6: Parent(Henry, Mary).
+	\item Combining rule 2 with fact 4 with substitution $\{x\rightarrow\text{Mary},y\rightarrow\text{Henry},z\rightarrow\text{Catherine}\}$, \\
+	infer 7: Parent(Catherine, Mary).
+	\item Combining rule 1 with fact 5 with substitution $\{x\rightarrow\text{Edward},y\rightarrow\text{Jane},z\rightarrow\text{Henry}\}$, \\
+	infer 8: Parent(Jane, Edward).
+	\item Combining rule 2 with fact 5 with substitution $\{x\rightarrow\text{Edward},y\rightarrow\text{Jane},z\rightarrow\text{Henry}\}$, \\
+	infer 9: Parent(Henry, Edward).
+	\item Combining rule 3 with facts 6 and 9 with substitution $\{x\rightarrow\text{Henry},y\rightarrow\text{Mary},z\rightarrow\text{Edward}\}$, \\
+	infer 10: Sibling(Mary, Edward).
+\end{itemize}
+\textbf{Problem 2.}
+\begin{description}
+	\item [A.] $$P(X=a) = 0.1+0.2+0.05 = 0.35$$
+$$P(X=b) = 0.2+0.05+0 = 0.25$$
+$$P(X=c) = 0.1+0.2+0.1 = 0.4$$
+$$P(X=d) = 0.1+0.2+0.1 = 0.4$$
+$$P(X=e) = 0.2+0.05+0.2 = 0.45$$
+$$P(X=f) = 0.05+0+0.1 = 0.15$$
+	\item [B.] X and Y are not independent because the probability in the top right cell (0.1) is not equal to the probability of a times c ($0.35\cdot 0.4 =0.14 \neq 0.1$)
+	\item [C.] $P(X=a|Y=e)=\frac{0.2}{0.45}=0.444$
+\end{description}
+\textbf{Problem 3.}
+\begin{description}
+	\item [A.] $$\frac{2}{5}\cdot 0.2+\frac{2}{5}\cdot 0.6+\frac{1}{5}\cdot 0.9=0.5$$
+	\item [B.] The probability that the coin is category 1 is: $\frac{\frac{2}{5}\cdot 0.2}{0.5}=0.16$\\
+	The probability that the coin is category 2 is: $\frac{\frac{2}{5}\cdot 0.6}{0.5}=0.48$\\
+	The probability that the coin is category 2 is: $\frac{\frac{1}{5}\cdot 0.9}{0.5}=0.36$
+	\item [C.] The probability that a coin randomly picked up from the bag gets heads twice in two tosses is $\frac{2}{5}\cdot 0.2^2+\frac{2}{5}\cdot 0.6^2+\frac{1}{5}\cdot 0.9^2=0.322$\\
+	The probability that the coin is category 1 is: $\frac{\frac{2}{5}\cdot 0.2^2}{0.322}=0.04969$\\
+	The probability that the coin is category 2 is: $\frac{\frac{2}{5}\cdot 0.6^2}{0.322}=0.44720$\\
+	The probability that the coin is category 3 is: $\frac{\frac{1}{5}\cdot 0.9^2}{0.322}=0.50310$
+\end{description}
+\end{document}
