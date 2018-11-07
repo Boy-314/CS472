@@ -214,8 +214,9 @@ vector<int> dp1(vector<int> ATOMS, vector<clause> S, vector<int> V)
 		// success: all clauses are satisfied
 		if(S.empty())
 		{
-			for(auto A : ATOMS)
+			for(int A = 0; A < ATOMS.size(); A++)
 			{
+				cout << "A: " << A << endl;
 				if(V[A] == -1)
 				{
 					V[A] = 1;
@@ -235,10 +236,12 @@ vector<int> dp1(vector<int> ATOMS, vector<clause> S, vector<int> V)
 		else if(pure_literals(ATOMS, S, V) != 0)
 		{
 			int L = pure_literals(ATOMS, S, V);
+			cout << "pure literal\n";	
 			V = obviousAssign(L,V);
 			
 			// delete every clause containing L from S
-			vector<int> to_remove;
+			// vector<int> to_remove;
+			int line_counter = 0;
 			for(auto line : S)
 			{
 				vector<int>::iterator iter;
@@ -246,14 +249,17 @@ vector<int> dp1(vector<int> ATOMS, vector<clause> S, vector<int> V)
 				{
 					if(*iter == L || *iter == -L)
 					{
-						iter = (line.atoms).erase(iter);
+						S.erase(S.begin() + line_counter);
+						break;
 					}
 					else
 					{
 						++iter;
 					}
 				}
+				line_counter++;
 			}
+			cout << S.size() << endl;
 		}
 		
 		// single literal forced assignment
@@ -317,6 +323,7 @@ int main()
 		istringstream iss(line);
 		int atom;
 		vector<int> temp;
+		bool zero = false;
 		while(iss >> atom)
 		{
 			temp.push_back(atom);
@@ -339,6 +346,32 @@ int main()
 	{
 		V.push_back(-1);
 	}
+	set_of_clauses.erase(set_of_clauses.begin() + set_of_clauses.size());
+	for(auto i : set_of_clauses)
+	{
+		for(auto j : i.atoms)
+		{
+			cout << j;
+		}
+		cout << endl;
+	}
 	vector<int> output = dp1(ATOMS, set_of_clauses, V);
+	ifstream davis_putnam_output_file;
+	davis_putnam_output_file.open("DavisPutnamOutput.txt");
+	counter = 0;
+	for(auto i : output)
+	{
+		cout << "i: " << i << endl;
+		counter++;
+		if(i == 0)
+		{
+			cout << counter << " F\n";
+		}
+		if(i == 1)
+		{
+			cout << counter << " T\n";
+		}
+	}
+	davis_putnam_output_file.close();
 	return 0;
 }
