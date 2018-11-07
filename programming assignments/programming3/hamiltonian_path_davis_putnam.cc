@@ -308,6 +308,7 @@ int main()
 {
 	// parse set of clauses from the output of the front end
 	vector<clause> set_of_clauses;
+	vector<int> ATOMS;
 	ifstream front_end_output_file;
 	front_end_output_file.open("FrontEndOutput.txt");
 	string line;
@@ -324,8 +325,23 @@ int main()
 		set_of_clauses.push_back(atoms);
 	}
 	
-	// TODO: create vector of unique atoms
-	// 		 create V vector and initialize all values to -1
+	// TODO: 
+	// 		 
 	//		 call dp1 method
+	int counter = 0;
+	while(set_of_clauses[counter].atoms[0] > 0)
+	{
+		for(auto i : set_of_clauses[counter].atoms)
+		{
+			ATOMS.push_back(i);
+		}
+		counter++;
+	}
+	vector<int> V;
+	for(auto i : ATOMS)
+	{
+		V.push_back(-1);
+	}
+	vector<int> output = dp1(ATOMS, set_of_clauses, V);
 	return 0;
 }
