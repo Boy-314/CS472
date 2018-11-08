@@ -236,7 +236,7 @@ vector<int> dp1(vector<int> ATOMS, vector<clause> S, vector<int> V)
 		else if(pure_literals(ATOMS, S, V) != 0)
 		{
 			int L = pure_literals(ATOMS, S, V);
-			// cout << "pure literal: " << L << "\n";	
+			// cout << "pure literal: " << L << "\n";
 			V = obviousAssign(L,V);
 			// if(L < 0)
 			// {
@@ -273,6 +273,7 @@ vector<int> dp1(vector<int> ATOMS, vector<clause> S, vector<int> V)
 		// single literal forced assignment
 		else if(single_literals(ATOMS, S, V))
 		{
+			// cout << "single literal\n";
 			// find the single literal
 			int L;
 			for(auto line : S)
@@ -326,6 +327,7 @@ int main()
 	ifstream front_end_output_file;
 	front_end_output_file.open("FrontEndOutput.txt");
 	string line;
+	bool zero = false;
 	while(getline(front_end_output_file, line))
 	{
 		istringstream iss(line);
@@ -334,21 +336,41 @@ int main()
 		bool zero = false;
 		while(iss >> atom)
 		{
+			if(atom == 0)
+			{
+				zero = true;
+			}
 			temp.push_back(atom);
 		}
 		clause atoms = {temp};
 		set_of_clauses.push_back(atoms);
+		if(zero)
+		{
+			break;
+		}
 	}
-	front_end_output_file.close();
 	int counter = 0;
-	while(set_of_clauses[counter].atoms[0] > 0)
+	while(set_of_clauses[counter].atoms[0] != 0)
 	{
 		for(auto i : set_of_clauses[counter].atoms)
 		{
-			ATOMS.push_back(i);
+			if(i < 0)
+			{
+				ATOMS.push_back(-i);
+			}
+			else
+			{
+				ATOMS.push_back(i);
+			}
 		}
 		counter++;
 	}
+	sort(ATOMS.begin(), ATOMS.end());
+	ATOMS.erase(unique(ATOMS.begin(), ATOMS.end()), ATOMS.end());
+	// for(auto i : ATOMS)
+	// {
+		// cout << i << endl;
+	// }
 	vector<int> V;
 	for(auto i : ATOMS)
 	{
@@ -381,7 +403,12 @@ int main()
 			davis_putnam_output_file << counter << " T\n";
 		}
 	}
-	davis_putnam_output_file << 0;
+	davis_putnam_output_file << 0 << endl;
+	while(getline(front_end_output_file, line))
+	{
+		davis_putnam_output_file << line << endl;
+	}
+	front_end_output_file.close();
 	davis_putnam_output_file.close();
 	return 0;
 }
