@@ -1,0 +1,56 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{wasysym}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsthm}
+\usepackage{braket}
+\usepackage{microtype}
+\usepackage{amssymb}
+\usepackage{listings}
+\usepackage{tikz}
+\usetikzlibrary{trees}
+\newcommand{\Mod}[1]{\ (\mathrm{mod}\ #1)}
+\begin{document}
+\title{Artifical Intelligence Problem Set 7}
+\date{}
+\author{Willie Yee}
+\maketitle
+\noindent
+\textbf{Problem 1.}\\
+We want to calculate $P(M=1|A=1,D=2,C=F,R=1)$, $P(M=2|A=1,D=2,C=F,R=1)$, and $P(M=3|A=1,D=2,C=F,R=1)$. The maximum of these three probabilities is the classification attribute M that Naive Bayes will select.
+\begin{align*}
+	P(M=1|A=1,D=2,C=F,R=1)&=P(M=1)P(A=1|M=1)P(D=2|M=1)P(C=F|M=1)P(R=1|M=1)\\
+	&=\frac{1}{4}\cdot\frac{2}{25}\cdot\frac{22}{25}\cdot\frac{2}{25}\cdot\frac{15}{25}\\
+	&=\frac{66}{78125}
+\end{align*}
+\begin{align*}
+	P(M=2|A=1,D=2,C=F,R=1)&=P(M=2)P(A=1|M=2)P(D=2|M=2)P(C=F|M=2)P(R=1|M=2)\\
+	&=\frac{1}{4}\cdot\frac{12}{25}\cdot\frac{24}{25}\cdot\frac{12}{25}\cdot\frac{15}{25}\\
+	&=\frac{2592}{78125}
+\end{align*}
+\begin{align*}
+	P(M=3|A=1,D=2,C=F,R=1)&=P(M=3)P(A=1|M=3)P(D=2|M=3)P(C=F|M=3)P(R=1|M=3)\\
+	&=\frac{1}{2}\cdot\frac{6}{50}\cdot\frac{47}{50}\cdot\frac{12}{50}\cdot\frac{17}{50}\\
+	&=\frac{7191}{3125000}
+\end{align*}
+Since $\frac{15}{2914}$ is the largest of these three numbers, Naive Bayes will classify $A=1,D=2,C=F,R=1$ with $M=2$.\\
+\\
+\textbf{Problem 2.}
+\begin{description}
+	\item [A.] 1-nearest neighbors:
+		\begin{description}
+			\item [A.] Red
+			\item [B.] Red
+			\item [C.] Blue
+			\item [D.] Red
+		\end{description}
+	\item 3-nearest neighbors:
+		\begin{description}
+			\item [A.] Red
+			\item [B.] Blue
+			\item [C.] Red
+			\item [D.] Blue
+		\end{description}
+	\item [B.] The maximum accuracy is $\frac{19}{29}$. It will classify A-Blue, B-Blue, C-Red, D-Red
+\end{description}
+\end{document}
