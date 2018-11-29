@@ -1,0 +1,66 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{wasysym}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsthm}
+\usepackage{braket}
+\usepackage{microtype}
+\usepackage{amssymb}
+\usepackage{listings}
+\usepackage{tikz}
+\usetikzlibrary{trees}
+\newcommand{\Mod}[1]{\ (\mathrm{mod}\ #1)}
+\begin{document}
+\title{Artifical Intelligence Problem Set 9}
+\date{}
+\author{Willie Yee}
+\maketitle
+\noindent
+\textbf{Problem 1.}
+\begin{description}
+	\item [dogs] $P(S0\rightarrow S1)=1$ implies that dogs must be a noun.
+	\item [wag]
+\end{description}
+\begin{enumerate}
+	\item wag is noun with probability 0.2: $P(S1\rightarrow S2)=0.1$
+	\begin{description}
+		\item [tail] 
+		\begin{enumerate}
+			\item tail is noun with probability 0.8: $P(S1\rightarrow S2)=0.1$
+			\begin{description}
+				\item [and] is conjunction with probability 1: $P(S2\rightarrow S3)=0.2$
+				\begin{enumerate}
+					\item \textbf{bark} is noun with probability 0.2: $P(S3\rightarrow S6)=0.8$
+					\item \textbf{bark} is verb with probability 0.8: $P(S3\rightarrow S7)=0.2$
+				\end{enumerate}
+			\end{description}
+			\item tail is verb with probability 0.2: $P(S1\rightarrow S4)=0.7$
+			\begin{description}
+				\item [and] is conjunction with probability 1: $P(S4\rightarrow S8)=0.4$
+				\begin{enumerate}
+					\item \textbf{bark} is noun with probability 0.2: $P(S8\rightarrow S6)=0.4$
+					\item \textbf{bark} is verb with probability 0.8: $P(S8\rightarrow S7)=0.6$
+				\end{enumerate}
+			\end{description}
+		\end{enumerate}
+	\end{description}
+	\item wag is verb with probability 0.8: $P(S1\rightarrow S4)=0.7$
+	\begin{description}
+		\item [tail]
+		\begin{enumerate}
+			\item tail is noun with probability 0.8: $P(S4\rightarrow S9)=0.2$
+			\begin{description}
+				\item [and] is conjunction with probability 1: $P(S9\rightarrow S3)=0.6$
+				\begin{enumerate}
+					\item \textbf{bark} is noun with probability 0.2: $P(S3\rightarrow S6)=0.8$
+					\item \textbf{bark} is verb with probability 0.8: $P(S3\rightarrow S7)=0.2$
+				\end{enumerate}
+			\end{description}
+			\item Verb Verb STATE DOES NOT EXIST
+		\end{enumerate}
+	\end{description}
+\end{enumerate}
+\begin{enumerate}
+	\item $$P()$$
+\end{enumerate}
+\end{document}
