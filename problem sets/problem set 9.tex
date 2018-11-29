@@ -1,0 +1,88 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{wasysym}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsthm}
+\usepackage{braket}
+\usepackage{microtype}
+\usepackage{amssymb}
+\usepackage{listings}
+\usepackage{tikz}
+\usetikzlibrary{trees}
+\newcommand{\Mod}[1]{\ (\mathrm{mod}\ #1)}
+\begin{document}
+\title{Artifical Intelligence Problem Set 9}
+\date{}
+\author{Willie Yee}
+\maketitle
+\noindent
+\textbf{Problem 1.}
+\begin{description}
+	\item [dogs] $P(S0\rightarrow S1)=1$ implies that dogs must be a noun.
+	\item [wag]
+\end{description}
+\begin{enumerate}
+	\item wag is noun with probability 0.2: $P(S1\rightarrow S2)=0.1$
+	\begin{description}
+		\item [tail] 
+		\begin{enumerate}
+			\item tail cannot be noun: no state $P(S2\rightarrow S2)$
+			\item tail is verb with probability 0.2: $P(S2\rightarrow S4)=0.6$
+			\begin{description}
+				\item [and] is conjunction with probability 1: $P(S4\rightarrow S8)=0.4$
+				\begin{enumerate}
+					\item \textbf{bark} is noun with probability 0.2: $P(S8\rightarrow S6)=0.4$
+					\item \textbf{bark} is verb with probability 0.8: $P(S8\rightarrow S7)=0.6$
+				\end{enumerate}
+			\end{description}
+		\end{enumerate}
+	\end{description}
+	\item wag is verb with probability 0.8: $P(S1\rightarrow S4)=0.7$
+	\begin{description}
+		\item [tail]
+		\begin{enumerate}
+			\item tail is noun with probability 0.8: $P(S4\rightarrow S9)=0.2$
+			\begin{description}
+				\item [and] is conjunction with probability 1: $P(S9\rightarrow S3)=0.6$
+				\begin{enumerate}
+					\item \textbf{bark} is noun with probability 0.2: $P(S3\rightarrow S6)=0.8$
+					\item \textbf{bark} is verb with probability 0.8: $P(S3\rightarrow S7)=0.2$
+				\end{enumerate}
+			\end{description}
+			\item Verb Verb STATE DOES NOT EXIST
+		\end{enumerate}
+	\end{description}
+\end{enumerate}
+Taggings with non-zero probabilities:
+\begin{enumerate}
+	\item *START* *START* noun noun verb conjunction noun *END* *END*
+	\item *START* *START* noun noun verb conjunction verb *END* *END*
+	\item *START* *START* noun verb noun conjunction noun *END* *END*
+	\item *START* *START* noun verb noun conjunction verb *END* *END*
+\end{enumerate}
+$$\frac{P(t|w)}{P(t)}$$
+Unnormalized probabalities:
+\begin{enumerate}
+	\item $1\cdot 0.1\cdot 0.6\cdot 0.4\cdot 0.4\cdot\frac{0.8}{0.5}\cdot\frac{0.2}{0.5}\cdot\frac{0.2}{0.4}\cdot\frac{1}{0.1}\cdot\frac{0.2}{0.5}=0.012288$
+	\item $1\cdot 0.1\cdot 0.6\cdot 0.4\cdot 0.6\cdot\frac{0.8}{0.5}\cdot\frac{0.2}{0.5}\cdot\frac{0.2}{0.4}\cdot\frac{1}{0.1}\cdot\frac{0.8}{0.4}=0.9216$
+	\item $1\cdot 0.7\cdot 0.2\cdot 0.6\cdot 0.8\cdot\frac{0.8}{0.5}\cdot\frac{0.8}{0.4}\cdot\frac{0.8}{0.5}\cdot\frac{1}{0.1}\cdot\frac{0.2}{0.5}=1.376256$
+	\item $1\cdot 0.7\cdot 0.2\cdot 0.6\cdot 0.2\cdot\frac{0.8}{0.5}\cdot\frac{0.8}{0.4}\cdot\frac{0.8}{0.5}\cdot\frac{1}{0.1}\cdot\frac{0.8}{0.4}=1.72032$
+\end{enumerate}
+\textbf{Problem 2.} The following two-word sentence has a non-zero probability in the k-gram model, but is not a possible tagging in the CFG in problem set 1: Dogs bark (noun noun).\\
+\\
+\textbf{Problem 3.} The following string of words has a non-zero probability in the k-gram model, but has no parse at all in the CFG in problem set 1: ???\\
+\\
+\textbf{Problem 4.}
+\begin{description}
+	\item [S0.] *START* *START*
+	\item [S1.] *START* Noun
+	\item [S2.] Noun Prep
+	\item [S3.] Noun Verb
+	\item [S4.] Noun *END*
+	\item [S5.] Verb Noun
+	\item [S6.] Verb Prep
+	\item [S7.] Verb *END*
+	\item [S8.] Prep Noun
+	\item [S9.] *END* *END*
+\end{description}
+\end{document}
